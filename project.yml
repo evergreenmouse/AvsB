@@ -35,6 +35,7 @@ targets:
       - target: DetectorModule
       - target: ClassificationModule
       - target: ProfileModule
+      - target: UserDataModule
 
     settings:
       base:
