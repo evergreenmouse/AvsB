@@ -1,0 +1,112 @@
+name: "Airbus vs Boeing"
+
+settings:
+  base:
+    DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+    ENABLE_BITCODE: NO
+    CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+    CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT: YES
+    CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: YES
+
+options:
+  deploymentTarget:
+    iOS: 13.0
+
+packages:
+  SnapKit:
+    url: https://github.com/SnapKit/SnapKit
+    from: 5.0.0
+  Moya:
+    url: https://github.com/Moya/Moya
+    from: 14.0.0
+
+targets:
+  AirbusVSBoeing:
+    platform: iOS
+    type: application
+    sources:
+      - path: "AirbusVSBoeing"
+        excludes:
+          - "Modules/**/"
+        optional: true
+    dependencies:
+      - package: SnapKit
+      - target: PlanederModule
+      - target: DetectorModule
+      - target: ClassificationModule
+      - target: ProfileModule
+
+    settings:
+      base:
+        TARGETED_DEVICE_FAMILY: 1
+        DISPLAY_NAME: "AirbusVSBoeing"
+        DEVELOPMENT_TEAM: V9H3NHNZLD
+        PRODUCT_BUNDLE_IDENTIFIER: com.egm.avsb
+        CODE_SIGN_IDENTITY: "Apple Development"
+        CODE_SIGN_STYLE: "Automatic"
+        INFOPLIST_FILE: "AirbusVSBoeing/Info.plist"
+        OTHER_LDFLAGS: $(inherited) -ObjC
+
+  PlanederModule:
+    templates:
+      - Framework
+    templateAttributes:
+      frameworkName: PlanederModule
+    dependencies:
+      - package: SnapKit
+      - target: UserDataModule
+    sources:
+      - path: "AirbusVSBoeing/Modules/${frameworkName}"
+      
+  DetectorModule:
+    templates:
+      - Framework
+    templateAttributes:
+      frameworkName: DetectorModule
+    dependencies:
+      - package: SnapKit
+    sources:
+      - path: "AirbusVSBoeing/Modules/${frameworkName}"
+
+  ClassificationModule:
+    templates:
+      - Framework
+    templateAttributes:
+      frameworkName: ClassificationModule
+    dependencies:
+      - package: SnapKit
+    sources:
+      - path: "AirbusVSBoeing/Modules/${frameworkName}"
+      
+  ProfileModule:
+    templates:
+      - Framework
+    templateAttributes:
+      frameworkName: ProfileModule
+    dependencies:
+      - package: SnapKit
+    sources:
+      - path: "AirbusVSBoeing/Modules/${frameworkName}"
+      
+  UserDataModule:
+    templates:
+      - Framework
+    templateAttributes:
+      frameworkName: UserDataModule
+    dependencies:
+      - package: SnapKit
+    sources:
+      - path: "AirbusVSBoeing/Modules/${frameworkName}"
+
+
+targetTemplates:
+  Framework:
+    settings:
+      base:
+        INFOPLIST_FILE: "AirbusVSBoeing/Modules/${frameworkName}/Info.plist"
+        PRODUCT_BUNDLE_IDENTIFIER: com.egm.avsb.${frameworkName}
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGN_STYLE: Automatic
+        PROVISIONING_PROFILE_SPECIFIER: "Automatic"
+    platform: iOS
+    type: framework
